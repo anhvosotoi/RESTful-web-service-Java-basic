@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>glucose</title>
+</head>
+<body>
+  <p>
+    --------------------------------------------------------<br>
+  </p>
+  <p>
+    Hẹn nhiệt độ bật tắt quạt
+   <input type="number" id="thres" min="25" max="40" />
+   <button onclick="bat_hen()">Hẹn</button> <br>
+  </p>  
+  <p>
+    Tắt chế độ hẹn 
+   <button onclick="tat_hen()">Hủy hẹn</button> <br>
+   --------------------------------------------------------<br>
+  </p> 
+  
+  <p>
+    Nhiệt độ: <span id="nhietdo">0</span>°C
+  </p>
+  <p>
+    Độ ẩm: <span id="doam">0</span>%
+  </p>
+  ------------------------------------------------------<br>
+  <p>
+    LED1
+    <button onclick="bat1()">BAT</button>
+    <button onclick="tat1()">TAT</button>
+  </p>
+  <p>
+    Quạt2
+    <button onclick="bat2()">BAT</button>
+    <button onclick="tat2()">TAT</button>
+  </p>
+  
+</body>
+<script type="text/javascript">
+
+
+
+
+var threshold = 100 ;
+var mode_on=false;
+
+  function bat1(){
+var data = {cid : 1,
+ deviceName : "lamp1",
+ deviceType : true,
+ dataType : true,
+ bitValue : true,
+ decimalValue : 15};
+var json = JSON.stringify(data);
+var xhr = new XMLHttpRequest();
+xhr.open("PUT","http://192.168.1.3:8080/glucose/api/devices", true);
+xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+xhr.send(json);
+}
+
+function tat1(){
+var data = {cid : 1,
+ deviceName : "lamp1",
+ deviceType : true,
+ dataType : true,
+ bitValue : false,
+ decimalValue : 15};
+var json = JSON.stringify(data);
+var xhr = new XMLHttpRequest();
+xhr.open("PUT","http://192.168.1.3:8080/glucose/api/devices", true);
+xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+xhr.send(json);
+}
+
+function tat_hen(){
+  mode_on = false;
+  var data = {cid : 5,
+   deviceName : "hennhietdo",
+   deviceType : true,
+   dataType : true,
+   bitValue : mode_on,
+   decimalValue : threshold};
+  var json = JSON.stringify(data);
+  var xhr = new XMLHttpRequest();
+  xhr.open("PUT","http://192.168.1.3:8080/glucose/api/devices", true);
+  xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+  xhr.send(json);
+ }
+
+function bat2(){
+   if(mode_on == true){
+    mode_on = false; 
+  var data = {cid : 5,
+   deviceName : "hennhietdo",
+   deviceType : true,
+   dataType : true,
+   bitValue : mode_on,
+   decimalValue : threshold};
+  var json = JSON.stringify(data);
+  var xhr = new XMLHttpRequest();
+  xhr.open("PUT","http://192.168.1.3:8080/glucose/api/devices", true);
+  xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+  xhr.send(json);
+}
+var data = {cid : 2,
+ deviceName : "pan2",
+ deviceType : true,
+ dataType : true,
+ bitValue : true,
+ decimalValue : 15};
+var json = JSON.stringify(data);
+var xhr = new XMLHttpRequest();
+xhr.open("PUT","http://192.168.1.3:8080/glucose/api/devices", true);
+xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+xhr.send(json);
+}
+
+function tat2(){
+   if(mode_on == true){
+    mode_on = false; 
+  var data = {cid : 5,
+   deviceName : "hennhietdo",
+   deviceType : true,
+   dataType : true,
+   bitValue : mode_on,
+   decimalValue : threshold};
+  var json = JSON.stringify(data);
+  var xhr = new XMLHttpRequest();
+  xhr.open("PUT","http://192.168.1.3:8080/glucose/api/devices", true);
+  xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+  xhr.send(json);
+}
+var data = {cid : 2,
+ deviceName : "pan2",
+ deviceType : true,
+ dataType : true,
+ bitValue : false,
+ decimalValue : 15};
+var json = JSON.stringify(data);
+var xhr = new XMLHttpRequest();
+xhr.open("PUT","http://192.168.1.3:8080/glucose/api/devices", true);
+xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+xhr.send(json);
+}
+//----------------------------------------------------------------------------
+
+
+function bat_hen(){
+threshold = Number(document.getElementById("thres").value);
+mode_on = true;
+var data = {cid : 5,
+ deviceName : "hennhietdo",
+ deviceType : true,
+ dataType : true,
+ bitValue : mode_on,
+ decimalValue : threshold};
+ var json = JSON.stringify(data);
+ var xhr = new XMLHttpRequest();
+ xhr.open("PUT","http://192.168.1.3:8080/glucose/api/devices", true);
+ xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+ xhr.send(json);
+}
+ 
+
+
+//--------------------------------------------------------------------------------------------------------
+window.onload = getnhietdo3() ;
+function getnhietdo3() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() { 
+    if (this.readyState == 4 && this.status == 200) {
+      var str = xhttp.responseText;
+      var obj = JSON.parse(str);
+      document.getElementById("nhietdo").innerHTML = obj.decimalValue;
+      getnhietdo3();
+    }
+  }
+  xhttp.open("GET", "http://192.168.1.3:8080/glucose/api/devices/3", true);
+  xhttp.send();
+}
+
+window.onload = getdoam4() ;
+function getdoam4() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() { 
+    if (this.readyState == 4 && this.status == 200) {
+      var str = xhttp.responseText;
+      var obj = JSON.parse(str);
+      document.getElementById("doam").innerHTML = obj.decimalValue;
+      getdoam4();
+    }
+  }
+  xhttp.open("GET", "http://192.168.1.3:8080/glucose/api/devices/4", true);
+  xhttp.send();
+}
+
+
+</script>
+</html>

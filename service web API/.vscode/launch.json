@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-NgocanhApplication<ngocanh>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.bk.ngocanh.NgocanhApplication",
+            "projectName": "ngocanh",
+            "args": ""
+        }
+    ]
+}
